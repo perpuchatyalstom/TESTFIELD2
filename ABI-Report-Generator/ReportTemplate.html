@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header-box, .table-box, .footer-box {
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            max-width: 600px;
+        }
+        .info {
+            margin-bottom: 20px;
+        }
+        .info div {
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 12px; /* Smaller font size */
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+      
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .filter-buttons, .action-buttons {
+            display: flex;
+        }
+        .filter-buttons button, .action-buttons button {
+            margin-right: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .filter-buttons button:hover, .action-buttons button:hover {
+            background-color: #0056b3;
+        }
+        .filter-buttons button.active {
+            background-color: #0056b3;
+        }
+        .failed-row {
+        background-color: #f8d7da; /* Highlight failed rows in light red */
+        }
+        @media print {
+            .failed-row {
+                background-color: #f8d7da !important; /* Ensure the background color is applied when printing */
+                -webkit-print-color-adjust: exact; /* Ensure colors are printed correctly */
+                print-color-adjust: exact; /* Ensure colors are printed correctly */
+            }
+            body {
+                margin: 0;
+                background-color: #ffffff;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                transform: scale(1); /* Scale content to 80% */
+                transform-origin: top left; /* Ensure scaling starts from the top left */
+            }
+            .header-box, .table-box, .footer-box {
+                box-shadow: none;
+                border: none;
+                margin: 0;
+                padding: 0;
+            }
+            .buttons-container {
+                display: flex; /* Ensure buttons are visible when printing */
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+            .filter-buttons button, .action-buttons button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                text-align: center;
+                padding: 10px 20px;
+                margin-right: 10px;
+                display: inline-block;
+                text-decoration: none;
+                font-size: 14px;
+                -webkit-print-color-adjust: exact; /* Ensure colors are printed correctly */
+            }
+            .test-status {
+                padding: 10px;
+                color: white;
+                text-align: center;
+                border-radius: 4px;
+                font-size: 16px;
+                font-weight: bold;
+                display: inline-block;
+                -webkit-print-color-adjust: exact; /* Ensure colors are printed correctly */
+            }
+            .test-passed {
+                background-color: green;
+            }
+            .test-failed {
+                background-color: red;
+            }
+         
+        }
+        .footer-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .footer-box .summary-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .footer-box .summary-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .footer-box .test-status-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        .footer-box .test-status {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .footer-box .test-passed {
+            background-color: green;
+        }
+        .footer-box .test-failed {
+            background-color: red;
+        }
+        th:nth-child(7), td:nth-child(7) {
+            width: 30px; /* Instrument */
+        }
+        th:nth-child(6), td:nth-child(6) {
+            width: 190px; /* Test Name */
+        }
+
+        th:nth-child(10), td:nth-child(10) {
+            width: 30px; /* Top limit */
+        }
+        th:nth-child(9), td:nth-child(9) {
+            width: 30px; /* Value */
+        }
+        th:nth-child(8), td:nth-child(8) {
+            width: 30px; /* Low limit */
+        }
+        th:nth-child(5), td:nth-child(5) {
+            width: 30px; /* Status */
+        }
+        th:nth-child(4), td:nth-child(4) {
+            width: 30px; /* Script */
+        }
+        th:nth-child(3), td:nth-child(3) {
+            width: 30px; /* SRC */
+        }
+        th:nth-child(2), td:nth-child(2) {
+            width: 30px; /* Time */
+        }
+        th:nth-child(1), td:nth-child(1) {
+            width: 30px; /* Date */
+        }
+        .sorted-asc::after {
+            content: '▲';
+        }
+        .sorted-desc::after {
+            content: '▼';
+        }
+        .sorted-asc, .sorted-desc {
+            background: #ddd;
+        }
+        .search-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        #searchButton {
+            margin-left: 2px;
+        }
+
+        #searchIcon {
+            font-size: 1em;  
+        }
+
+        #searchBox {
+            width: 60px;
+            padding: 2px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+        #searchButton.orange-background {
+            background-color: orange;
+        }
+        .black-icon {
+            color: black;
+        }   
+        #myTable tr:hover {
+            background-color: #f0f0f0; /* Change this to the color you want */
+        }
+
+        #myTable .failed-row:hover {
+            background-color: #f5c6cb; /* Darker shade when cursor is over it */
+        }
+    </style>
+    <script>
+        async function saveAsReport() {
+        try {
+            const options = {
+                types: [{
+                    description: 'HTML Files',
+                    accept: {'text/html': ['.html']},
+                }],
+            };
+            const handle = await window.showSaveFilePicker(options);
+            const writable = await handle.createWritable();
+            await writable.write(new Blob([document.documentElement.outerHTML], { type: 'text/html' }));
+            await writable.close();
+            } catch (err) {
+                console.error('Save As operation failed:', err);
+            }
+        }
+        function filterResults(status) {
+            var rows = document.querySelectorAll('tbody tr');
+            rows.forEach(function(row) {
+                if (status === 'ALL' || row.dataset.status === status) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Highlight the active button
+        var buttons = document.querySelectorAll('.filter-buttons button');
+        buttons.forEach(function(button) {
+            if (button.dataset.status === status) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+                if (button.id !== 'searchButton') {
+                    button.classList.remove('orange-background');
+                }
+            }
+        });
+
+
+        function printReport() {
+            window.print();
+        }
+
+        function shareReport() {
+        if (navigator.share) {
+            var blob = new Blob([document.documentElement.innerHTML], {type : 'text/html'});
+            var file = new File([blob], 'report.html', { type: 'text/html' });
+            navigator.share({
+                files: [file],
+                title: 'Test Report',
+                text: 'Check out this test report.',
+            }).catch(console.error);
+        } else {
+            alert('Web Share API is not supported in your browser.');
+        }
+    }
+
+    // Set default filter to 'ALL' on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        filterResults('ALL');
+    });
+        
+    document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+        location.reload();
+    }
+    });
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header-box">
+            <header>
+                <img src="C:\ABI\media\logo.jpg" alt="Company Logo">
+                <h2>PCB Test Report</h2>
+            </header>
+            <!--HEADER_SECTION-->
+        </div>
+        <div class="table-box">
+            <div class="buttons-container">
+                <div class="filter-buttons">
+                    <button onclick="filterResults('ALL')">Show All</button>
+                    <button onclick="filterResults('PASS')">Show Pass</button>
+                    <button onclick="filterResults('FAIL')">Show Fail</button>
+                    <button data-status="SEARCH" id="searchButton" style="display: inline-flex; align-items: center; justify-content: center;">
+                        <i class="fa fa-search" id="searchIcon"></i>
+                    </button>
+                    <input type="text" id="searchBox" placeholder="Search..." style="display: none;">
+                </div>
+                <div class="action-buttons">
+                    <button onclick="saveAsReport()">Save As</button>
+                    <button onclick="printReport()">Print</button>
+                    <button onclick="shareReport()">Share</button>
+                </div>
+            </div>
+            <table style="font-size: 10px;" id="myTable">
+                <thead>
+                    <tr>
+                        <!--TABLE_HEADERS-->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--TABLE_ROWS-->
+                </tbody>
+            </table>
+        </div>
+        <div class="footer-box">
+            <div class="summary-details">
+                <div class="summary-header">Test Summary</div>
+                <div>Test passed: <!--TEST_PASSED--></div>
+                <div>Test failed: <!--TEST_FAILED--></div>
+                <div>Total steps: <!--TOTAL_STEPS--></div>
+                <div>Test duration: <!--TEST_DURATION--></div>
+            </div>
+            <div class="test-status-container">
+                <div class="test-status <!--TEST_STATUS_CLASS-->"><!--TEST_STATUS_MESSAGE--></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const originalOrder = Array.from(document.querySelector('#myTable tbody').querySelectorAll('tr'));
+        document.querySelectorAll('th').forEach(header => {
+            let sortDirection = 0;  // 0 = not sorted, 1 = sorted ascending, -1 = sorted descending
+            header.addEventListener('click', () => {
+                const tableElement = document.querySelector('#myTable');
+                const tbody = tableElement.querySelector('tbody');
+    
+                // Remove CSS classes from all headers
+                document.querySelectorAll('th').forEach(th => th.classList.remove('sorted-asc', 'sorted-desc'));
+    
+                if (sortDirection === 0) {
+                    // If the column is not sorted, sort it in ascending order
+                    Array.from(tbody.querySelectorAll('tr'))
+                        .sort((rowA, rowB) => {
+                            const textA = rowA.querySelector(`td:nth-child(${Array.from(header.parentNode.children).indexOf(header) + 1})`).textContent;
+                            const textB = rowB.querySelector(`td:nth-child(${Array.from(header.parentNode.children).indexOf(header) + 1})`).textContent;
+                            return textA.localeCompare(textB);
+                        })
+                        .forEach(tr => tbody.appendChild(tr));
+    
+                    // Update sort direction and CSS classes
+                    sortDirection = 1;
+                    header.classList.add('sorted-asc');
+                } else if (sortDirection === 1) {
+                    // If the column is sorted in ascending order, sort it in descending order
+                    Array.from(tbody.querySelectorAll('tr'))
+                        .sort((rowA, rowB) => {
+                            const textA = rowA.querySelector(`td:nth-child(${Array.from(header.parentNode.children).indexOf(header) + 1})`).textContent;
+                            const textB = rowB.querySelector(`td:nth-child(${Array.from(header.parentNode.children).indexOf(header) + 1})`).textContent;
+                            return textB.localeCompare(textA);
+                        })
+                        .forEach(tr => tbody.appendChild(tr));
+    
+                    // Update sort direction and CSS classes
+                    sortDirection = -1;
+                    header.classList.add('sorted-desc');
+                } else {
+                    // If the column is sorted in descending order, restore the original order
+                    originalOrder.forEach(tr => tbody.appendChild(tr));
+    
+                    // Update sort direction
+                    sortDirection = 0;
+                }
+            });
+        });
+
+    window.onload = function() {
+            document.querySelector('#searchBox').addEventListener('input', function() {
+            const searchValue = this.value.toLowerCase();
+            const searchIcon = document.querySelector('#searchIcon');
+            if (searchValue) {
+            searchButton.classList.add('orange-background');
+            searchIcon.classList.add('black-icon');
+
+        } else {
+            searchButton.classList.remove('orange-background');
+            searchIcon.classList.remove('black-icon');
+
+        }
+            document.querySelectorAll('#myTable tbody tr').forEach(row => {
+                const cellValue = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+                if (cellValue.includes(searchValue)) {
+                    row.style.display = '';  // Show row
+                } else {
+                    row.style.display = 'none';  // Hide row
+                }
+            });
+        });
+    };
+
+    document.querySelector('#searchButton').addEventListener('click', function() {
+        const searchBox = document.querySelector('#searchBox');
+        if (searchBox.style.display === 'none') {
+            searchBox.style.display = 'inline-block';
+        } else {
+            searchBox.style.display = 'none';
+        }
+    });
+    
+    </script>
+</body>
+</html>

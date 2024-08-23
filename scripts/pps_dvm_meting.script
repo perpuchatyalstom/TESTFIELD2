@@ -1,0 +1,34 @@
+voltage=12.1
+label "USL","LSL"
+
+PPS_CH1_VOLTAGE_LIMIT=voltage
+PPS_CH1_OUTPUT_STATE = 1 // Switch ON PPS Channel 1. O=OFF / 1=ON
+startlog "log1.txt"
+step=0.05
+i=0
+while voltage>11 {
+	voltage=voltage-step
+
+	PPS_CH1_VOLTAGE_LIMIT=voltage
+	display voltage
+	j=0
+	stop=0
+	while stop=0 {
+		pause=100
+		wait MIS4_DVM1_MEASUREMENT
+		voltRead=MIS4_DVM1_MEASUREMENT
+		volt2=PPS_CH1_VOLTAGE_MEASUREMENT
+		diff=((voltread/voltage)-1)*100
+
+		if abs(diff)<0.1 {
+			stop=1
+			wacht =j*0.1
+			writelog voltage,volt2,voltread,diff,j,wacht,tick()
+		}
+		j=j+1
+		if j>100 {
+			stop=1
+		}
+	}
+}
+EXECUTE STOP

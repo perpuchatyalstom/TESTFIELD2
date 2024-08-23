@@ -1,0 +1,7 @@
+openlog "results.csv"
+writelog date(),time(),TFL_STEP_NO,TFL_STEP_NAME
+writelog date(),time(),"ABI","PASS",TFL_STEP_NAME,"DVM1",(Vtar-Vtol),">",MIS4_DVM1_MEASUREMENT,"<",(Vtar+Vtol)
+
+python {
+abi.writelog('"    ","5.1.3.1c UB",Isrc='+Isrc)
+}

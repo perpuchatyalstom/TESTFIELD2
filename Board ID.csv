@@ -1,0 +1,9 @@
+﻿PIN,Board ,ABI test folder,Resistor,Voltage,Current
+I/O1,FQC1 Test Interface,XE-FQC1,10000,10V,1mA
+I/O1,AMS v0.2,XE-MatrixBoard,9100,10V,1.1mA
+I/O1,Universal TOP,ABI Universal PCB,8300,10V,1.2mA
+I/O1,XE-SMS,XE-SMS,7500,10V,1.33mA
+I/O1,P-Boards TOP,P-Boards,6800,10V,1.47mA
+I/O2,P-BTB,P-BTB,11000,10V,0.91mA
+I/O2,XE-GIB,XE-GIB1,10000,10V,1.0mA
+I/O2,XE-FQC2,XE-FQC2,9100,10V,1.1mA

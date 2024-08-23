@@ -1,0 +1,8 @@
+hz = 'Hz'
+v = 'V'
+V = 'V'
+a = A ='A'
+vrms = 'Vrms'
+freq = 'FREQ'
+per = 'PERIOD'
+stat = 'STAT'
